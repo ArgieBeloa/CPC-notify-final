@@ -4,12 +4,13 @@ import React, { useEffect, useState } from "react";
 import {
   FlatList,
   ImageBackground,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../../constants/ColorCpc";
@@ -89,50 +90,39 @@ import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 //   eventCategory: "Technology",
 // });
 
- type Event={
-  id?: string
- }
+type Event = {
+  id?: string;
+};
 
 const events = () => {
+  // get all events in server
+  const { eventData, setEventData, studentToken } = useUser();
+  const [removeFlatList, setRemoveFlatlist] = useState(true);
 
-    // get all events in server
-  const { eventData, setEventData, studentToken} = useUser();
-
-  useEffect(()=>{
-    
+  useEffect(() => {
     const getAllEvents = async () => {
       try {
-          const events = await eventsDataFunction(studentToken)
-          setEventData(events)
+        const events = await eventsDataFunction(studentToken);
+        setEventData(events);
       } catch (error) {
-         console.log(error)
+        console.log(error);
       }
-    
-    }
+    };
 
-    getAllEvents()
-  },[])
+    getAllEvents();
+  }, []);
 
-
-
-  const[selectedEvent, setSelectedEvent] = useState<Event | any>()
+  const [selectedEvent, setSelectedEvent] = useState<Event | any>();
 
   const router = useRouter(); // ✅ hook inside the component
 
-  
-  const handleSelectedEvent =(id: string)=>{
- 
-
-
-// console.log('selected event', event)
-  router.push({
+  const handleSelectedEvent = (id: string) => {
+    // console.log('selected event', event)
+    router.push({
       pathname: `../EventDetails/${id}`,
       params: { id },
     });
-
-    
-
-  }
+  };
 
   const eventThisMonthRender = ({ item }: { item: any }) => {
     let dateAndTime = item.eventDate + " at " + item.eventTime;
@@ -167,22 +157,36 @@ const events = () => {
           {item.eventShortDescription}
         </Text>
 
-        <View style={{ flexDirection: "row", gap: 5, flexWrap: "wrap", marginLeft: 30, marginTop: 7,}}>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 5,
+            flexWrap: "wrap",
+            marginLeft: 30,
+            marginTop: 7,
+          }}
+        >
           <Ionicons
             name="calendar-clear-outline"
             size={iconSize}
             color="black"
           />
-          <Text style={{ fontWeight: 400 }}>
-            {dateAndTime}
-          </Text>
+          <Text style={{ fontWeight: 400 }}>{dateAndTime}</Text>
         </View>
 
- <View style={{ flexDirection: "row", gap: 5, flexWrap: "wrap", marginLeft: 30, marginTop: 7,}}>
-        <Text style={{fontWeight: 400 }}>
-          <EvilIcons name="location" size={iconSize} color="black" />
-          {item.eventLocation}
-        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 5,
+            flexWrap: "wrap",
+            marginLeft: 30,
+            marginTop: 7,
+          }}
+        >
+          <Text style={{ fontWeight: 400 }}>
+            <EvilIcons name="location" size={iconSize} color="black" />
+            {item.eventLocation}
+          </Text>
         </View>
         <View
           style={{
@@ -190,7 +194,7 @@ const events = () => {
             marginTop: 7,
             flexDirection: "row",
             gap: 10,
-            flexWrap: 'wrap',
+            flexWrap: "wrap",
           }}
         >
           <Text>
@@ -258,7 +262,10 @@ const events = () => {
               styles.viewRadius,
             ]}
           >
-            <FontAwesome5 name="search" size={24} color="black" />
+            <Pressable onPress={() => setRemoveFlatlist(false)}>
+              <FontAwesome5 name="search" size={24} color="black" />
+            </Pressable>
+
             <TextInput
               placeholder="Search Events..."
               style={styles.searchTextInput}
@@ -313,14 +320,18 @@ const events = () => {
           <View
             style={[styles.eventsArea, styles.viewContainer, styles.viewRadius]}
           >
-            <FlatList
-              data={eventData}
-              keyExtractor={(item) => item.id}
-              renderItem={eventThisMonthRender}
-              numColumns={2}
-              columnWrapperStyle={styles.flatlistRow}
-              style={styles.flatlistEventContainer}
-            />
+           
+
+              <FlatList
+                style={[styles.flatlistEventContainer,{ display: removeFlatList ? 'flex' : 'none' }]}
+                data={eventData}
+                keyExtractor={(item) => item.id}
+                renderItem={eventThisMonthRender}
+                numColumns={2}
+                columnWrapperStyle={styles.flatlistRow}
+              
+              />
+            
           </View>
         </SafeAreaView>
       </ScrollView>
