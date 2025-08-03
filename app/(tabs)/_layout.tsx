@@ -1,45 +1,77 @@
-import { Tabs } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons'; // ✅ import icons
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from '../../hooks/useColorScheme';
+import { useFonts } from 'expo-font';
 
-export default function TabLayout() {
+import EventsScreen from './events'; // ✅ import EventsScreen
+import HomeScreen from './home';
+import ProfileScreen from './profile';
+
+// Optional: If you're using TypeScript and have types
+// import { RootTabParamList } from '../types'; 
+// const Tabs = createBottomTabNavigator<RootTabParamList>();
+
+// import color
+import { COLORS } from '../../constants/ColorCpc';
+
+const Tabs = createBottomTabNavigator(); // 👈 Works without type for JS too
+
+export default function RootLayout() {
   const colorScheme = useColorScheme();
 
+  const [loaded] = useFonts({
+    SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
+  });
+
+  if (!loaded) return null;
+
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
+  
+      <Tabs.Navigator
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarStyle: {
+            // Customize if needed
           },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName: keyof typeof Ionicons.glyphMap;
+
+            switch (route.name) {
+              case 'home':
+                iconName = focused ? 'home' : 'home-outline';
+                break;
+              case 'events':
+                iconName = focused ? 'calendar' : 'calendar-outline';
+                break;
+              case 'profile':
+                iconName = focused ? 'person' : 'person-outline';
+                break;
+              default:
+                iconName = 'help';
+            }
+
+            return <Ionicons name={iconName} size={24} color={focused ? COLORS.Primary : 'gray'} />;
+          },
+          tabBarActiveTintColor: COLORS.Primary,
+          tabBarInactiveTintColor: 'gray',
+        })}
+      >
+        <Tabs.Screen name="home" component={HomeScreen} options={{ title: 'Home' }} />
+        <Tabs.Screen name="events" component={EventsScreen} options={{ title: 'Events' }} />
+        <Tabs.Screen name="profile" component={ProfileScreen} options={{ title: 'Profile' }} />
+      </Tabs.Navigator>
+
+   
+
+        );
 }
+
+        const styles = StyleSheet.create({
+          safeAreaViewCotainer: {
+          width: '100%',
+        height: '100%',
+  },
+});

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "242263249452",
+    "project_id": "capstonenotify",
+    "storage_bucket": "capstonenotify.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242263249452:android:ef090b8f724025cff53789",
+        "android_client_info": {
+          "package_name": "com.app.cpcnotify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUAbE9fcxCHWWoEBntrF-QG9tXMSOP7qI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242263249452:android:0fce1242998bc733f53789",
+        "android_client_info": {
+          "package_name": "com.argiepbeloa.cpcnotify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUAbE9fcxCHWWoEBntrF-QG9tXMSOP7qI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
