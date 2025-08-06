@@ -84,8 +84,13 @@ const index = () => {
   const router = useRouter();
 
   //variable para ka pasa value sa Home tsx file and more
-  const { setStudentData, setEventData, setStudentToken, setStudentNumber, studentToken } =
-    useUser();
+  const {
+    setStudentData,
+    setEventData,
+    setStudentToken,
+    setStudentNumber,
+    studentToken,
+  } = useUser();
 
   // navigation status
 
@@ -93,7 +98,7 @@ const index = () => {
     router.push("/register");
     setLoginStatus(false);
   };
-  // isOfficer 
+  // isOfficer
 
   // authenticate Student
   const haddleAuthStudent = async () => {
@@ -102,27 +107,26 @@ const index = () => {
       const token = await authStudent(userName, password);
       setStudentToken(token);
       setStudentNumber(userName);
-      setLoading(false);
 
-   
-       const studentData = await getStudentData(token, userName)
-    
-      if(studentData.category === "sspc"){
-         router.push("/eventAnnouncer")
-      }else{
-         router.push("/(tabs)/home")
-      }
-    
-     
-     
+      const studentData = await getStudentData(token, userName);
+
+      setLoading(false);
+      // if(studentData.category === "sspc"){
+      //    router.push("/eventAnnouncer")
+      //     // router.push("/(tabs)/home")
+      // }else if(studentData.category === "student"){
+      //    router.push("/(tabs)/home")
+      // }
+
+      router.push("/(tabs)/home");
+      // console.log(studentData);
     } catch (error) {
       console.log("Login failed");
-      console.log(error)
+      console.log(error);
       setModalVisible(true);
     }
   };
 
-  
   async function authenticateStudent(
     studentNumber: string,
     studentPassword: string
@@ -163,9 +167,8 @@ const index = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      
-      return studentData.data
-    
+
+      return studentData.data;
     } catch (error) {
       console.log(error);
     }

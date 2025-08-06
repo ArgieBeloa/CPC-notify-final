@@ -16,8 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 // import colors
 import { COLORS } from "../constants/ColorCpc";
 import { registerForPushNotificationsAsync } from '../src/pushToken';
-
-import axios from "axios";
+import { registerStudent } from "./api/spring";
 
 
 enum STUDENT_COURSE {
@@ -145,53 +144,29 @@ const register = () => {
     studentRecentEvaluations: StudentRecentEvaluations[];
   };
 
-  async function postToServer() {
-    // add loading first
-    setLoading(true);
-    const endPoint =
-      // "https://capstonestudentloginapi.onrender.com/api/students/register";
-      "http://192.168.254.103:8080/api/students/register";
-    // const studentPassword = studentNumber + "cpc";
-    // const department = selectedDeparment;
-    // const course = selectedCourse;
 
-    try {
-      // generateToken()
 
-      console.log("Your token: " + expoPushToken);
-    
+async function postToServer() {
+  setLoading(true);
 
-      const registerResponse = await axios.post(endPoint, {
-        // studentName,
-        // studentNumber,
-        // studentPassword,
-        // department,
-        // course,
-        // notificationId: expoPushToken,
-        // studentData,
-         studentName: studentName,
-        studentNumber: studentNumber,
-        studentPassword: studentNumber + "cpc",
-        course: selectedCourse,
-        department: selectedDeparment,
-        notificationId:expoPushToken,
-        studentAverageAttendance: 0.0,
-        studentAverageRatings: 0.0,
-        studentEventAttended: [],
-        studentRecentEvaluations: [],
-      });
+  try {
+    const response = await registerStudent({
+      studentName,
+      studentNumber,
+      selectedCourse,
+      selectedDeparment,
+      expoPushToken
+    });
 
-      console.log(registerResponse);
-      setLoading(false);
-      setModalVisible(true);
-
-      // add success adding
-    } catch (error) {
-      console.log(error);
-    } finally {
-      console.log("Your token: " + expoPushToken);
-    }
+    console.log('Registration successful:', response);
+    setModalVisible(true);
+  } catch (error) {
+    console.error('Registration failed:', error);
+  } finally {
+    setLoading(false);
   }
+}
+
 
 useEffect(()=>{
 const getToken = async () => {

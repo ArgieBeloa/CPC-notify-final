@@ -3,12 +3,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { useColorScheme } from '../../hooks/useColorScheme';
 import { useFonts } from 'expo-font';
+import { useColorScheme } from '../../hooks/useColorScheme';
 
 import EventsScreen from './events'; // ✅ import EventsScreen
 import HomeScreen from './home';
 import ProfileScreen from './profile';
+import RateScreen from './rate';
 
 // Optional: If you're using TypeScript and have types
 // import { RootTabParamList } from '../types'; 
@@ -49,6 +50,9 @@ export default function RootLayout() {
               case 'profile':
                 iconName = focused ? 'person' : 'person-outline';
                 break;
+              case 'rate':
+                iconName = focused ? 'person' : 'person-outline';
+                break;
               default:
                 iconName = 'help';
             }
@@ -62,6 +66,7 @@ export default function RootLayout() {
         <Tabs.Screen name="home" component={HomeScreen} options={{ title: 'Home' }} />
         <Tabs.Screen name="events" component={EventsScreen} options={{ title: 'Events' }} />
         <Tabs.Screen name="profile" component={ProfileScreen} options={{ title: 'Profile' }} />
+        <Tabs.Screen name="rate" component={RateScreen} options={{ title: 'Rate' }} />
       </Tabs.Navigator>
 
    
